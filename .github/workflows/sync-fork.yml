@@ -1,0 +1,22 @@
+name: Sync Fork Upstream
+run-name: 同步上游仓库更新
+# 必须配置权限，否则无法推送
+permissions:
+  contents: write
+on:
+  # UTC 02:00 执行，北京时间上午10点；想北京时间凌晨2点改为 cron: '0 18 * * *'
+  schedule:
+    - cron: '0 2 * * *'
+  # 网页手动运行
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub CLI Sync Fork
+        env:
+          UPSTREAM_REPO: qist/tvbox
+          BRANCH: master
+        run: |
+          gh repo sync . --source $UPSTREAM_REPO -b $BRANCH
